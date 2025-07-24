@@ -238,7 +238,7 @@ if __name__ == "__main__":
 
     parser = HelpfulArgumentParser(
         description=(
-            "🎵 Interval Trainer by michal-gora\n"
+            "🎵 Interval Trainer // © 2025 michal-gora\n"
             "Train your ear by listening to ascending, descending, and harmonic intervals.\n"
             "The interval name is spoken aloud after each playback.\n\n"
             "Use -h or --help to see available options."
@@ -268,5 +268,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     instrument = session.new_part(args.instrument)
-    selected_lesson = lesson_map.get(args.lesson)
-    selected_lesson()
+
+    try:
+        print("❌ Press Ctrl+C at any time to exit.\n")
+        selected_lesson = lesson_map.get(args.lesson)
+        selected_lesson()
+    except KeyboardInterrupt:
+        print("\n👋 Exiting. Goodbye!")
