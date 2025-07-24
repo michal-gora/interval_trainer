@@ -3,7 +3,8 @@
 A command-line ear training tool for practicing musical intervals.
 It plays ascending, descending, or harmonic intervals and quizzes you based on lesson presets.
 
-For listening only — no looking required. Interval names are spoken aloud after each playback.
+For listening only — no looking required. 
+Interval names are spoken aloud after each playback.
 ---
 
 ## 🎹 Features
