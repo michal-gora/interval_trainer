@@ -15,6 +15,20 @@ It plays ascending, descending, or harmonic intervals and quizzes you based on l
 
 ---
 
+## 🧰 Requirements
+
+- Python 3.7+
+- `espeak` (for speech output, automatically installed in setup.sh script)
+- Linux (Debian-based recommended)
+
+Install `espeak` on Debian/Ubuntu (or let the setup.sh script install it for you):
+
+```bash
+sudo apt install espeak
+```
+
+---
+
 ## 🚀 Setup
 
 1. Clone or download this repository.
@@ -45,20 +59,6 @@ python3 main.py <lesson_number> [-i INSTRUMENT]
 
 - `<lesson_number>`: Choose a lesson (1–4)
 - `-i, --instrument`: SCAMP instrument to use (default: `piano`)
-
----
-
-## 🧰 Requirements
-
-- Python 3.7+
-- `espeak` (for speech output)
-- Linux (Debian-based recommended)
-
-Install `espeak` on Debian/Ubuntu:
-
-```bash
-sudo apt install espeak
-```
 
 ---
 
