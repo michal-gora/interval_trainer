@@ -47,6 +47,10 @@ sudo apt install espeak
    ```bash
    ./run.sh 1 -i piano
    ```
+   To show all available options run:
+   ```
+   ./run.sh --help
+   ```
 
 ---
 
