@@ -38,14 +38,13 @@ It plays ascending, descending, or harmonic intervals and quizzes you based on l
 ## 🧠 Usage
 
 ```bash
-python3 main.py <lesson_number> [-i INSTRUMENT] [--note "Optional message"]
+python3 main.py <lesson_number> [-i INSTRUMENT]
 ```
 
 ### Arguments:
 
 - `<lesson_number>`: Choose a lesson (1–4)
 - `-i, --instrument`: SCAMP instrument to use (default: `piano`)
-- `--note`: Optional message to display before the lesson
 
 ---
 
