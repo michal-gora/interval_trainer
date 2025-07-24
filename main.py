@@ -1,3 +1,25 @@
+# MIT License
+# Copyright (c) 2025 michal-gora
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+
 import logging
 logging.getLogger().setLevel(logging.ERROR)
 
@@ -196,8 +218,16 @@ def lesson5():
 
 # ---------------- CLI Entry ----------------
 
-if __name__ == "__main__":
+class HelpfulArgumentParser(argparse.ArgumentParser):
+    def error(self, message):
+        sys.stderr.write(f"\n❌ Error: {message}\n")
+        sys.stderr.write("💡 Use -h or --help to see usage information.\n\n")
+        # self.print_usage(sys.stderr)
+        sys.exit(2)
 
+
+
+if __name__ == "__main__":
     lesson_map = {
         1: lesson1,
         2: lesson2,
@@ -206,13 +236,37 @@ if __name__ == "__main__":
         5: lesson5
     }
 
-    parser = argparse.ArgumentParser(description="Interval training lesson selector")
-    parser.add_argument("lesson", type=int, choices=range(1, len(lesson_map)+1), help="Lesson number (1-4)")
-    parser.add_argument("-i", "--instrument", type=str, default="piano", help="Instrument to use (e.g. 'piano', 'violin')")
+    parser = HelpfulArgumentParser(
+        description=(
+            "🎵 Interval Trainer by michal-gora\n"
+            "Train your ear by listening to ascending, descending, and harmonic intervals.\n"
+            "The interval name is spoken aloud after each playback.\n\n"
+            "Use -h or --help to see available options."
+        ),
+        formatter_class=argparse.RawTextHelpFormatter
+    )
+
+    parser.add_argument(
+        "lesson",
+        type=int,
+        choices=range(1, len(lesson_map) + 1),
+        help="Lesson number to run (1–" + str(len(lesson_map)) + ")"
+    )
+
+    parser.add_argument(
+        "-i", "--instrument",
+        type=str,
+        default="piano",
+        help="Instrument to use (default: piano)"
+    )
+
+    # 👇 If no arguments are passed, show help and exit
+    if len(sys.argv) <= 1:
+        parser.print_help(sys.stderr)
+        sys.exit(1)
 
     args = parser.parse_args()
 
     instrument = session.new_part(args.instrument)
-
     selected_lesson = lesson_map.get(args.lesson)
     selected_lesson()
