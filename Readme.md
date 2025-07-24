@@ -20,7 +20,7 @@ For listening only — no looking required. Interval names are spoken aloud afte
 
 - Python 3.7+
 - `espeak` (for speech output, automatically installed in setup.sh script)
-- Linux (Debian-based recommended)
+- Linux (Debian-based recommended) or WSL on Windows
 
 Install `espeak` on Debian/Ubuntu (or let the setup.sh script install it for you):
 
