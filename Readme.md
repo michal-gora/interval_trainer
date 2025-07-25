@@ -1,4 +1,4 @@
-# 🎵 Interval Trainer
+# 🎵 Music Interval Trainer
 
 A command-line ear training tool for practicing musical intervals.
 It plays ascending, descending, or harmonic intervals and quizzes you based on lesson presets.
