@@ -44,9 +44,10 @@ sudo apt install espeak
 
    > This will create a virtual environment and install required Python packages.
 
-4. Run a lesson (examples):
-   
-   
+4. Start a lesson. For example, run:
+   ```bash
+   ./run.sh 1
+   ```
 
 ---
 
