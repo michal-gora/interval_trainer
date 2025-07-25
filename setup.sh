@@ -11,19 +11,50 @@ pip install -r requirements.txt
 if ! command -v espeak >/dev/null 2>&1; then
     echo "📢 espeak not found. Attempting to install it..."
 
-    if [ -f /etc/debian_version ]; then
-        sudo apt update
-        sudo apt install -y espeak
-        sudo apt install -y FluidSynth
+    if command -v apt >/dev/null 2>&1; then
+        sudo apt update && sudo apt install -y espeak
+
+    elif command -v dnf >/dev/null 2>&1; then
+        sudo dnf install -y espeak
+
+    elif command -v pacman >/dev/null 2>&1; then
+        sudo pacman -Sy --noconfirm espeak
+
+    elif command -v zypper >/dev/null 2>&1; then
+        sudo zypper install -y espeak
+
     else
-        echo "⚠️  Automatic installation of espeak is only supported on Debian/Ubuntu."
-        echo "❗ Please install it manually (e.g., 'sudo apt install espeak')."
+        echo "⚠️ Could not detect a supported package manager."
+        echo "❗ Please install 'espeak' manually using your system's tools."
+        exit 1
     fi
 else
     echo "✅ espeak is already installed."
 fi
 
-pip install fluidsynth
+
+# Try to install FluidSynth if not already installed
+if ! command -v fluidsynth >/dev/null 2>&1; then
+    echo "📢 FluidSynth not found. Attempting to install it..."
+
+    if command -v apt >/dev/null 2>&1; then
+        sudo apt update
+        sudo apt install -y fluidsynth
+    elif command -v dnf >/dev/null 2>&1; then
+        sudo dnf install -y fluidsynth
+    elif command -v pacman >/dev/null 2>&1; then
+        sudo pacman -Sy --noconfirm fluidsynth
+    elif command -v zypper >/dev/null 2>&1; then
+        sudo zypper install -y fluidsynth
+    else
+        echo "⚠️  Automatic installation of FluidSynth is not supported on this system."
+        echo "❗ Please install it manually (e.g., 'sudo apt install fluidsynth')."
+    fi
+else
+    echo "✅ FluidSynth is already installed."
+fi
+
+
 
 echo "✅ Setup complete! Virtual environment is ready."
 echo "👉 To start using the app:"
