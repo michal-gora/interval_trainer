@@ -20,6 +20,7 @@ For listening only — no looking required. Interval names are spoken aloud afte
 
 - Python 3.7+
 - `espeak` (for speech output, automatically installed in setup.sh script)
+- `fluidsynth` (for audio output, may not be necessary, automatically installed in setup.sh script)
 - Linux (Debian-based recommended) or WSL on Windows
 
 Install `espeak` on Debian/Ubuntu (or let the setup.sh script install it for you):
@@ -33,8 +34,9 @@ sudo apt install espeak
 ## 🚀 Setup
 
 1. Clone or download this repository.
+2. Allow execution permission for setup.sh and run.sh (`sudo chmod +x setup.sh run.sh`).
 
-2. Run the setup script (installs dependencies and optional `espeak`):
+3. Run the setup script (installs dependencies):
 
    ```bash
    ./setup.sh
@@ -42,10 +44,18 @@ sudo apt install espeak
 
    > This will create a virtual environment and install required Python packages.
 
-3. Run a lesson (example):
-
+4. Run a lesson (example):
+   To show all available lessons run:
    ```bash
-   ./run.sh 1 -i piano
+   ./run.sh -l
+   ```
+   To start lesson 4 run:
+   ```bash
+   ./run.sh 4
+   ```
+   To change the instrument to e.g. violin run :
+   ```bash
+   ./run.sh 1 -i violin
    ```
    To show all available options run:
    ```
