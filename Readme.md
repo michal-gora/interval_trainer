@@ -64,6 +64,7 @@ python3 main.py <lesson_number> [-i INSTRUMENT]
 
 - `<lesson_number>`: Choose a lesson (1–4)
 - `-i, --instrument`: SCAMP instrument to use (default: `piano`)
+- `-l, --list`: List available lessons
 
 ---
 
