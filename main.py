@@ -52,11 +52,13 @@ class IntervalStyle(Enum):
     DESCENDING = "descending"
 
 class PlaybackFormat(Enum):
+    SINGLE_HARMONIC = "single_harmonic"
+    SINGLE_ASCENDING = "single_ascending"
+    SINGLE_DESCENDING = "single_descending"
     REPEAT_HARMONIC = "repeat_harmonic"
     REPEAT_ASCENDING = "repeat_ascending"
     REPEAT_DESCENDING = "repeat_descending"
     MIXED = "mixed"
-    SINGLE_HARMONIC = "single_harmonic"
 
 class IntervalType(Enum):
     UNISON = 0
@@ -148,6 +150,9 @@ def play_random_interval(
     top_note = bottom_note + semitone_diff
 
     format_to_styles = {
+        PlaybackFormat.SINGLE_HARMONIC: [IntervalStyle.HARMONIC],
+        PlaybackFormat.SINGLE_ASCENDING: [IntervalStyle.ASCENDING],
+        PlaybackFormat.SINGLE_DESCENDING: [IntervalStyle.DESCENDING],
         PlaybackFormat.REPEAT_HARMONIC: [IntervalStyle.HARMONIC] * 3,
         PlaybackFormat.REPEAT_ASCENDING: [IntervalStyle.ASCENDING] * 3,
         PlaybackFormat.REPEAT_DESCENDING: [IntervalStyle.DESCENDING] * 3,
@@ -176,6 +181,7 @@ def play_random_interval(
     name = name = INTERVAL_NAMES.get(int(semitone_diff), f"{semitone_diff} semitones")
 
     speak(name)
+    print(name)
 
 
 # ---------------- Example Lesson ----------------
@@ -194,6 +200,11 @@ def simpletest(allowed_intervals = None):
 def harmonictest(allowed_intervals = None):
     for _ in range(20):
         play_random_interval(format=PlaybackFormat.REPEAT_HARMONIC, allowed_intervals=allowed_intervals)
+        session.wait(3.0)
+
+def movingtest(allowed_intervals = None, format = PlaybackFormat.SINGLE_HARMONIC):
+    for _ in range(20):
+        play_random_interval(format=format, allowed_intervals=allowed_intervals)
         session.wait(3.0)
 
 def lesson1():
@@ -216,6 +227,18 @@ def lesson5():
     print("Lesson 5: Only harmonic intervals")
     harmonictest(None)
 
+def lesson6():
+    print("Lesson 6: Only ascending intervals")
+    movingtest(None, format=PlaybackFormat.SINGLE_ASCENDING)
+
+def lesson7():
+    print("Lesson 7: Only descending intervals")
+    movingtest(None, format=PlaybackFormat.SINGLE_DESCENDING)
+
+def lesson8():
+    print("Lesson 8: Custom/Placeholder")
+    harmonictest(None)
+
 # ---------------- CLI Entry ----------------
 
 class HelpfulArgumentParser(argparse.ArgumentParser):
@@ -233,7 +256,10 @@ if __name__ == "__main__":
         2: lesson2,
         3: lesson3,
         4: lesson4,
-        5: lesson5
+        5: lesson5,
+        6: lesson6,
+        7: lesson7,
+        8: lesson8
     }
 
     parser = HelpfulArgumentParser(
@@ -243,29 +269,50 @@ if __name__ == "__main__":
             "The interval name is spoken aloud after each playback.\n\n"
             "Use -h or --help to see available options."
         ),
+        usage=argparse.SUPPRESS,
         formatter_class=argparse.RawTextHelpFormatter
     )
 
     parser.add_argument(
-        "lesson",
-        type=int,
-        choices=range(1, len(lesson_map) + 1),
-        help="Lesson number to run (1–" + str(len(lesson_map)) + ")"
-    )
+    "lesson",
+    type=int,
+    choices=range(1, len(lesson_map) + 1),
+    nargs="?",  # 👈 makes it optional
+    help="Lesson number to run (1–" + str(len(lesson_map)) + ")"
+)
 
     parser.add_argument(
         "-i", "--instrument",
         type=str,
         default="piano",
-        help="Instrument to use (default: piano)"
+        help="Choose which instrument to use (default: piano)"
+    )
+    
+    parser.add_argument(
+        "-l", "--list",
+        action="store_true",
+        help="List available lessons"
     )
 
-    # 👇 If no arguments are passed, show help and exit
-    if len(sys.argv) <= 1:
-        parser.print_help(sys.stderr)
-        sys.exit(1)
 
     args = parser.parse_args()
+
+    if args.list:
+        print("🎵 Available Lessons:")
+        print("  1: Perfect Consonance       - Perfect 4th, 5th, Octave")
+        print("  2: Imperfect Consonance     - Minor/Major 3rds and 6ths")
+        print("  3: Dissonance               - Minor 2nd, Tritone, Major 7th, etc.")
+        print("  4: All Intervals            - Full set from Unison to Octave")
+        print("  5: Harmonic Chords Only     - Full set from Unison to Octave, only harmonic chords")
+        print("  6: Ascending Chords Only    - Full set from Unison to Octave, only ascending chords")
+        print("  7: Descending Chords Only    - Full set from Unison to Octave, only descending chords")
+        print("  8: Custom / Future Lesson   - Reserved for custom sets")
+        sys.exit(0)
+
+    ## If no argument passed
+    if args.lesson is None:
+        parser.print_help()
+        sys.exit(1)
 
     instrument = session.new_part(args.instrument)
 
