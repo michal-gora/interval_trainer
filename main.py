@@ -59,6 +59,7 @@ class PlaybackFormat(Enum):
     REPEAT_ASCENDING = "repeat_ascending"
     REPEAT_DESCENDING = "repeat_descending"
     MIXED = "mixed"
+    SINGLE_RANDOM = "single_random"
 
 class IntervalType(Enum):
     UNISON = 0
@@ -157,7 +158,7 @@ def play_random_interval(
         PlaybackFormat.REPEAT_ASCENDING: [IntervalStyle.ASCENDING] * 3,
         PlaybackFormat.REPEAT_DESCENDING: [IntervalStyle.DESCENDING] * 3,
         PlaybackFormat.MIXED: [IntervalStyle.ASCENDING, IntervalStyle.DESCENDING, IntervalStyle.HARMONIC],
-        PlaybackFormat.SINGLE_HARMONIC: [IntervalStyle.HARMONIC]
+        PlaybackFormat.SINGLE_RANDOM: [random.choice([IntervalStyle.ASCENDING, IntervalStyle.DESCENDING, IntervalStyle.HARMONIC])]
     }
 
     styles = format_to_styles.get(format)
@@ -199,13 +200,17 @@ def simpletest(allowed_intervals = None):
 
 def harmonictest(allowed_intervals = None):
     for _ in range(20):
-        play_random_interval(format=PlaybackFormat.REPEAT_HARMONIC, allowed_intervals=allowed_intervals)
+        play_random_interval(format=PlaybackFormat.REPEAT_HARMONIC, allowed_intervals=allowed_intervals, pause_before_speak=1.5)
         session.wait(3.0)
 
 def movingtest(allowed_intervals = None, format = PlaybackFormat.SINGLE_HARMONIC):
     for _ in range(20):
-        play_random_interval(format=format, allowed_intervals=allowed_intervals)
+        play_random_interval(format=format, allowed_intervals=allowed_intervals, pause_before_speak=1.5)
         session.wait(3.0)
+
+def randomtest(allowed_intervals = None):
+    play_random_interval(format=PlaybackFormat.SINGLE_RANDOM, pause_before_speak=1.5)
+    session.wait(3.0)
 
 def lesson1():
     print("Lesson 1: Perfect Consonance")
@@ -239,6 +244,11 @@ def lesson8():
     print("Lesson 8: Custom/Placeholder")
     harmonictest(None)
 
+def lesson9():
+    print("Lesson 9: Random")
+    while(True):
+       randomtest()
+
 # ---------------- CLI Entry ----------------
 
 class HelpfulArgumentParser(argparse.ArgumentParser):
@@ -259,7 +269,8 @@ if __name__ == "__main__":
         5: lesson5,
         6: lesson6,
         7: lesson7,
-        8: lesson8
+        8: lesson8,
+        9: lesson9
     }
 
     parser = HelpfulArgumentParser(
@@ -294,6 +305,12 @@ if __name__ == "__main__":
         help="List available lessons"
     )
 
+    parser.add_argument(
+        "-p", "--loop",
+        action="store_true",
+        help="List available lessons"
+    )
+
 
     args = parser.parse_args()
 
@@ -305,8 +322,9 @@ if __name__ == "__main__":
         print("  4: All Intervals            - Full set from Unison to Octave")
         print("  5: Harmonic Chords Only     - Full set from Unison to Octave, only harmonic chords")
         print("  6: Ascending Chords Only    - Full set from Unison to Octave, only ascending chords")
-        print("  7: Descending Chords Only    - Full set from Unison to Octave, only descending chords")
+        print("  7: Descending Chords Only   - Full set from Unison to Octave, only descending chords")
         print("  8: Custom / Future Lesson   - Reserved for custom sets")
+        print("  9: Random                   - Infinite random chords and formats")
         sys.exit(0)
 
     ## If no argument passed
@@ -320,5 +338,10 @@ if __name__ == "__main__":
         print("❌ Press Ctrl+C at any time to exit.\n")
         selected_lesson = lesson_map.get(args.lesson)
         selected_lesson()
+        while(args.loop):
+            speak("Looping: Starting again")
+            session.wait(0.3)
+            selected_lesson()
+        speak("Bye.")
     except KeyboardInterrupt:
         print("\n👋 Exiting. Goodbye!")
