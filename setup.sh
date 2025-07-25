@@ -14,6 +14,7 @@ if ! command -v espeak >/dev/null 2>&1; then
     if [ -f /etc/debian_version ]; then
         sudo apt update
         sudo apt install -y espeak
+        sudo apt install -y FluidSynth
     else
         echo "⚠️  Automatic installation of espeak is only supported on Debian/Ubuntu."
         echo "❗ Please install it manually (e.g., 'sudo apt install espeak')."
@@ -21,6 +22,8 @@ if ! command -v espeak >/dev/null 2>&1; then
 else
     echo "✅ espeak is already installed."
 fi
+
+pip install fluidsynth
 
 echo "✅ Setup complete! Virtual environment is ready."
 echo "👉 To start using the app:"
