@@ -180,8 +180,8 @@ def play_random_interval(
 
     name = name = INTERVAL_NAMES.get(int(semitone_diff), f"{semitone_diff} semitones")
 
-    speak(name)
     print(name)
+    speak(name)
 
 
 # ---------------- Example Lesson ----------------
