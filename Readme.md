@@ -46,27 +46,30 @@ sudo apt install espeak
 
 4. Run a lesson (examples):
    
-   To show all available lessons, run:
-   ```bash
-   ./run.sh -l
-   ```
-   To start lesson 4, run:
-   ```bash
-   ./run.sh 4
-   ```
-   To change the instrument to e.g. violin, run :
-   ```bash
-   ./run.sh 1 -i violin
-   ```
-   To show all available options, run:
-   ```
-   ./run.sh --help
-   ```
+   
 
 ---
 
 ## 🧠 Usage
 
+To show all available lessons, run:
+```bash
+./run.sh -l
+```
+To start lesson x (replace x with a number), run:
+```bash
+./run.sh x
+```
+To change the instrument to e.g. violin, run :
+```bash
+./run.sh 1 -i violin
+```
+To show all available options, run:
+```
+./run.sh --help
+```
+
+If you want to use the raw python script instead of running run.sh, do the same with main.py:
 ```bash
 python3 main.py <lesson_number> [-i INSTRUMENT]
 ```
